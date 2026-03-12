@@ -1,1 +1,26 @@
+name: Deploy Infra
 
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Azure Login
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Deploy Bicep to PROD
+      uses: azure/arm-deploy@v2
+      with:
+        subscriptionId: ${{ secrets.AZ_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ secrets.AZ_RESOURCE_GROUP }}
+        template: ./bicep/main.bicep
+        parameters: ./env/prod.parameters.json
+        deploymentName: ecom-prod-deployment
