@@ -38,6 +38,7 @@ resource gold 'Microsoft.Storage/storageAccounts/blobServices/containers@2022-09
 }
 
 // -------------------- DATABRICKS WORKSPACE --------------------
+
 var dbxName = toLower('${prefix}-${env}-dbx')
 var dbxManagedRg = '${prefix}-${env}-dbx-mrg'
 
@@ -48,10 +49,9 @@ resource dbx 'Microsoft.Databricks/workspaces@2023-02-01' = {
     name: 'standard'
   }
   properties: {
-    managedResourceGroupId: resourceId('Microsoft.Resources/resourceGroups', dbxManagedRg)
+    managedResourceGroupId: subscriptionResourceId('Microsoft.Resources/resourceGroups', dbxManagedRg)
   }
 }
-
 
 // -------------------- ADF INSTANCE --------------------
 var adfName = toLower('${prefix}-${env}-adf')
